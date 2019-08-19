@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>College Tuition Prediction [1/2]- Data Preparation</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="../assets/css/screen.css%3Fv=c05038bfbb.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/css/global.css%3Fv=c05038bfbb.css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,700" rel="stylesheet">
+
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+    <link rel="canonical" href="index.html" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    <link rel="amphtml" href="amp/index.html" />
+    
+    <meta property="og:site_name" content="Andrew Peng" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="College Tuition Prediction [1/2]- Data Preparation" />
+    <meta property="og:description" content="Welcome to part 1 to a series of posts regarding my college tuition project!In this project, I predict the tuition of colleges around the US using data from the National Center for Education Statistics. I chose features I thought would best predict college tuition, such as admission rate, graduation" />
+    <meta property="og:url" content="https://andrewpeng.dev/college-tuition-prediction-1/" />
+    <meta property="og:image" content="https://andrewpeng.dev/content/images/2019/08/delfi-de-la-rua-A_InfAQM_lU-unsplash.jpg" />
+    <meta property="article:published_time" content="2019-08-16T21:07:24.000Z" />
+    <meta property="article:modified_time" content="2019-08-18T01:14:38.000Z" />
+    <meta property="article:publisher" content="https://www.facebook.com/ghost" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="College Tuition Prediction [1/2]- Data Preparation" />
+    <meta name="twitter:description" content="Welcome to part 1 to a series of posts regarding my college tuition project!In this project, I predict the tuition of colleges around the US using data from the National Center for Education Statistics. I chose features I thought would best predict college tuition, such as admission rate, graduation" />
+    <meta name="twitter:url" content="https://andrewpeng.dev/college-tuition-prediction-1/" />
+    <meta name="twitter:image" content="https://andrewpeng.dev/content/images/2019/08/delfi-de-la-rua-A_InfAQM_lU-unsplash.jpg" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Andrew Peng" />
+    <meta name="twitter:site" content="tryghost" />
+    <meta property="og:image:width" content="2000" />
+    <meta property="og:image:height" content="1333" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Andrew Peng",
+        "logo": "https://static.ghost.org/v1.0.0/images/ghost-logo.svg"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Andrew Peng",
+        "url": "https://andrewpeng.dev/author/andrew/",
+        "sameAs": []
+    },
+    "headline": "College Tuition Prediction [1/2]- Data Preparation",
+    "url": "https://andrewpeng.dev/college-tuition-prediction-1/",
+    "datePublished": "2019-08-16T21:07:24.000Z",
+    "dateModified": "2019-08-18T01:14:38.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://andrewpeng.dev/content/images/2019/08/delfi-de-la-rua-A_InfAQM_lU-unsplash.jpg",
+        "width": 2000,
+        "height": 1333
+    },
+    "description": "Welcome to part 1 to a series of posts regarding my college tuition project!In this project, I predict the tuition of colleges around the US using data from the National Center for Education Statistics. I chose features I thought would best predict college tuition, such as admission rate, graduation",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://andrewpeng.dev/"
+    }
+}
+    </script>
+
+    <meta name="generator" content="Ghost 2.28" />
+    <link rel="alternate" type="application/rss+xml" title="Andrew Peng" href="../rss/index.html" />
+
+</head>
+<body class="post-template">
+
+    <div class="wrapper_minimal">
+
+        <header class="header" role="banner">
+    <h1 class="header__title">
+        <a title="Andrew Peng" href='../index.html'>Andrew Peng</a>
+    </h1>
+    <nav class="header__nav" role="navigation">
+        <a class="header__link" href="../index.html">Writing</a>
+        <a class="header__link" href="../project.html">Projects</a>
+        <a class="header__link" href="../about.html">About</a>
+    </nav>
+</header>
+
+<main class="main_minimal" role="main">
+    <article class="article__wrapper" role="article">
+
+        <header>
+            <h1 class="post__title">College Tuition Prediction [1/2]- Data Preparation</h1>
+        </header>
+
+        <section class="post__content-wrapper">
+            <div class="post__content">
+                <p>Welcome to part 1 to a series of posts regarding my college tuition project!</p><!--kg-card-begin: image--><figure class="kg-card kg-image-card"><img src="../content/images/2019/08/delfi-de-la-rua-A_InfAQM_lU-unsplash-1.jpg" class="kg-image"></figure><!--kg-card-end: image--><p>In this project, I predict the tuition of colleges around the US using data from the <a href="https://nces.ed.gov/ipeds/use-the-data">National Center for Education Statistics</a>. I chose features I thought would best predict college tuition, such as admission rate, graduation rate, and college location, and I ended up with roughly 20 features.</p><h3 id="data-visualization">Data Visualization</h3><p>Always the first process you should do with your data is to visualize it. Here, I created various plots of tuition vs. various factors I thought would be the best predictors using Seaborn.</p><!--kg-card-begin: image--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="../content/images/2019/08/tuition_hist.png" class="kg-image"><figcaption>Histogram of Tuition</figcaption></figure><!--kg-card-end: image--><p>From this graph, I can tell that tuition is right skewed with peak of around 8000$. </p><!--kg-card-begin: image--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="../content/images/2019/08/tuition_admissions.png" class="kg-image"><figcaption>Scatterplot of Tuition and Admissions Rate</figcaption></figure><!--kg-card-end: image--><p>While admissions rate seems much more varied from 0-20000$, the rate appears to generally decrease.</p><!--kg-card-begin: image--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="../content/images/2019/08/tuition_grad_rate.png" class="kg-image"><figcaption>Scatterplot of Tuition and Graduation Rate</figcaption></figure><!--kg-card-end: image--><p>Again, a similar trend where graduation rate varies a lot from 0-20000$ but exhibits an increase afterwards.</p><!--kg-card-begin: image--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="../content/images/2019/08/tuition_salary-1.png" class="kg-image"><figcaption>Scatterplot of Tuition and Professor Salary</figcaption></figure><!--kg-card-end: image--><p>As expected, as tuition increases, professors' salaries also increases. From these graphs, I predict that my models will be able to predict college tuition more accurately around 30,000$ because of its lower variability in factors like graduation rate. </p><h3 id="data-preparation">Data Preparation</h3><p>The data.csv file contains the colleges as rows and features (including tuition) as columns. I will be using Pandas for loading data and scikit-learn for preprocessing.</p><!--kg-card-begin: code--><pre><code class="language-Python">import pandas as pd
+import joblib
+
+import sklearn.preprocessing as preprocessing
+from sklearn.model_selection import train_test_split
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer</code></pre><!--kg-card-end: code--><p> I removed the colleges that didn't have tuition filled in, as well as the rows which have less than 18 out of the 25 features so that there are enough features to predict tuition. This left about 2900 colleges from the original total of 7000.</p><!--kg-card-begin: code--><pre><code class="language-Python">data = pd.read_csv('data/data.csv')
+data = data[pd.notnull(data['Tuition and fees'])]
+
+min_fields = 18
+for index, row in data.iterrows():
+    filled = 0
+
+    for name, field in row.items():
+        if str(field) != 'nan':
+            filled += 1
+
+    if filled &lt;= min_fields:
+        data.drop(index, inplace=True)
+        data.drop(data.columns[[0, 1, 2]], axis=1, inplace=True)</code></pre><!--kg-card-end: code--><p>Split data into train and test sets using train_test_split() with 80% of the data going into the train set.</p><!--kg-card-begin: code--><pre><code>data = data.reset_index(drop=True)
+train, test = train_test_split(data, test_size=0.2)
+X_train, y_train = train.drop(train.columns[[2]], axis=1), train.iloc[:,2]
+X_test, y_test = test.drop(test.columns[[2]], axis=1), test.iloc[:, 2]</code></pre><!--kg-card-end: code--><p>Scale targets between 0 and 1 for faster convergence. While the sklearn libary contains a plethora of scalers, I chose min max scaler because of its simplicity and skewed dataset. I saved the scaler using joblib so I could later scale the predicted targets back.</p><!--kg-card-begin: code--><pre><code class="language-Python">scaler = preprocessing.MinMaxScaler()
+scaler.fit(y_train.values.reshape(-1, 1))
+y_train, y_test = scaler.transform(y_train.values.reshape(-1, 1)), scaler.transform(y_test.values.reshape(-1, 1))
+joblib.dump(scaler, 'min_max_scaler.pkl')
+</code></pre><!--kg-card-end: code--><p>To encode the numeric features, I defined the columns which had numeric features and a Pipeline from sklearn. I first imputed the data (meaning I replaced missing values with the mean) and then scaled the data. For the categorical features, I instead used a OneHotEncoder in a Pipeline to convert the categories to numeric values. </p><!--kg-card-begin: code--><pre><code class="language-Python">numeric_features = X_train.columns[[0, 1] + [i for i in range(4, 24)]]
+numeric_trans = Pipeline(steps=[('imputer', SimpleImputer(strategy='mean')),
+('scaler', preprocessing.MinMaxScaler())])
+
+column_features = X_train.columns[[2, 3]]
+column_trans = Pipeline(steps=[('encoder', preprocessing.OneHotEncoder(drop='first'))])</code></pre><!--kg-card-end: code--><p>I then created a ColumnTransformer by passing the pipelines and feature names and then transformed the data.</p><!--kg-card-begin: code--><pre><code>transformer = ColumnTransformer(transformers=[('numeric', numeric_trans, numeric_features),
+('categorical', column_trans, column_features)],
+remainder='passthrough')
+transformer.fit(X_train)
+
+X_train = pd.DataFrame(transformer.transform(X_train))
+X_test = pd.DataFrame(transformer.transform(X_test))</code></pre><!--kg-card-end: code--><p>Now that the data is ready, it's finally time for creating the model in <a href="https://andrewpeng.dev/college-tuition-prediction-1/andrewpeng.dev/college-tuition-prediction-2">Part 2</a>!</p>
+            </div>
+        </section>
+
+
+
+    </article>
+
+    <nav class="post__footer" role="navigation">
+        <div class="footer__wrapper">
+            <div class="footer__wrapper-inner">
+                
+                <div class="footer__link-prev">
+                </div>
+
+                <div class="footer__link-next">
+                    <a class="footer__link-anchor" href="../college-tuition-prediction-2/index.html" rel="next">
+                        <object class="footer__link-icon-right">
+                            <embed src="../assets/icons/arrow-right.svg%3Fv=c05038bfbb" />
+                        </object>
+                        <p class="footer__link-label">Next</p>
+                        <h3 class="footer__title-article">College Tuition Prediction [2/2]- Model</h3>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+</main>
+
+
+<footer class="footer" role="contentinfo">
+    <div>Copyright &copy; 2019 <a href="../index.html">Andrew Peng</a> &bull; All rights reserved.</div>
+</footer>
+
+    </div>
+
+    <script>
+        var images = document.querySelectorAll('.kg-gallery-image img');
+        images.forEach(function (image) {
+            var container = image.closest('.kg-gallery-image');
+            var width = image.attributes.width.value;
+            var height = image.attributes.height.value;
+            var ratio = width / height;
+            container.style.flex = ratio + ' 1 0%';
+        })
+    </script>
+
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="https://andrewpeng.dev/assets/built/jquery.fitvids.js?v=c05038bfbb"></script>
+
+
+    
+
+    
+
+</body>
+</html>
