@@ -17,15 +17,15 @@
     <meta property="og:title" content="College Tuition Prediction [1/2]- Data Preparation" />
     <meta property="og:description" content="Welcome to part 1 to a series of posts regarding my college tuition project!In this project, I predict the tuition of colleges around the US using data from the National Center for Education Statistics. I chose features I thought would best predict college tuition, such as admission rate, graduation" />
     <meta property="og:url" content="https://andrewpeng.dev/college-tuition-prediction-1/" />
-    <meta property="og:image" content="https://andrewpeng.dev/content/images/2019/08/delfi-de-la-rua-A_InfAQM_lU-unsplash.jpg" />
+    <meta property="og:image" content="https://andrewpeng.dev/content/images/2019/08/delfi-de-la-rua-A_InfAQM_lU-unsplash-2.jpg" />
     <meta property="article:published_time" content="2019-08-19T02:20:00.000Z" />
-    <meta property="article:modified_time" content="2019-08-19T16:57:04.000Z" />
+    <meta property="article:modified_time" content="2019-08-19T17:23:16.000Z" />
     <meta property="article:publisher" content="https://www.facebook.com/ghost" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="College Tuition Prediction [1/2]- Data Preparation" />
     <meta name="twitter:description" content="Welcome to part 1 to a series of posts regarding my college tuition project!In this project, I predict the tuition of colleges around the US using data from the National Center for Education Statistics. I chose features I thought would best predict college tuition, such as admission rate, graduation" />
     <meta name="twitter:url" content="https://andrewpeng.dev/college-tuition-prediction-1/" />
-    <meta name="twitter:image" content="https://andrewpeng.dev/content/images/2019/08/delfi-de-la-rua-A_InfAQM_lU-unsplash.jpg" />
+    <meta name="twitter:image" content="https://andrewpeng.dev/content/images/2019/08/delfi-de-la-rua-A_InfAQM_lU-unsplash-2.jpg" />
     <meta name="twitter:label1" content="Written by" />
     <meta name="twitter:data1" content="Andrew Peng" />
     <meta name="twitter:site" content="@tryghost" />
@@ -50,10 +50,10 @@
     "headline": "College Tuition Prediction [1/2]- Data Preparation",
     "url": "https://andrewpeng.dev/college-tuition-prediction-1/",
     "datePublished": "2019-08-19T02:20:00.000Z",
-    "dateModified": "2019-08-19T16:57:04.000Z",
+    "dateModified": "2019-08-19T17:23:16.000Z",
     "image": {
         "@type": "ImageObject",
-        "url": "https://andrewpeng.dev/content/images/2019/08/delfi-de-la-rua-A_InfAQM_lU-unsplash.jpg",
+        "url": "https://andrewpeng.dev/content/images/2019/08/delfi-de-la-rua-A_InfAQM_lU-unsplash-2.jpg",
         "width": 2000,
         "height": 1333
     },
@@ -96,11 +96,11 @@
                 </section>
             </header>
             <figure class="post-image">
-                <amp-img src="https://andrewpeng.dev/content/images/2019/08/delfi-de-la-rua-A_InfAQM_lU-unsplash.jpg" width="600" height="400" layout="responsive"></amp-img>
+                <amp-img src="https://andrewpeng.dev/content/images/2019/08/delfi-de-la-rua-A_InfAQM_lU-unsplash-2.jpg" width="600" height="400" layout="responsive"></amp-img>
             </figure>
             <section class="post-content">
 
-                <p>Welcome to part 1 to a series of posts regarding my college tuition project!</p><figure class="kg-card kg-image-card"><amp-img src="https://andrewpeng.dev/content/images/2019/08/delfi-de-la-rua-A_InfAQM_lU-unsplash-1.jpg" class="kg-image" width="2000" height="1333" layout="responsive"></amp-img></figure><p>In this project, I predict the tuition of colleges around the US using data from the <a href="https://nces.ed.gov/ipeds/use-the-data">National Center for Education Statistics</a>. I chose features I thought would best predict college tuition, such as admission rate, graduation rate, and college location, and I ended up with roughly 20 features.</p><h3 id="data-visualization">Data Visualization</h3><p>Always the first process you should do with your data is to visualize it. Here, I created various plots of tuition vs. various factors I thought would be the best predictors using Seaborn.</p><figure class="kg-card kg-image-card kg-card-hascaption"><amp-img src="https://andrewpeng.dev/content/images/2019/08/tuition_hist.png" class="kg-image" width="432" height="288" layout="responsive"></amp-img><figcaption>Histogram of Tuition</figcaption></figure><p>From this graph, I can tell that tuition is right skewed with peak of around 8000$.</p><figure class="kg-card kg-image-card kg-card-hascaption"><amp-img src="https://andrewpeng.dev/content/images/2019/08/tuition_admissions.png" class="kg-image" width="432" height="288" layout="responsive"></amp-img><figcaption>Scatterplot of Tuition and Admissions Rate</figcaption></figure><p>While admissions rate seems much more varied from 0-20000$, the rate appears to generally decrease.</p><figure class="kg-card kg-image-card kg-card-hascaption"><amp-img src="https://andrewpeng.dev/content/images/2019/08/tuition_grad_rate.png" class="kg-image" width="432" height="288" layout="responsive"></amp-img><figcaption>Scatterplot of Tuition and Graduation Rate</figcaption></figure><p>Again, a similar trend where graduation rate varies a lot from 0-20000$ but exhibits an increase afterwards.</p><figure class="kg-card kg-image-card kg-card-hascaption"><amp-img src="https://andrewpeng.dev/content/images/2019/08/tuition_salary-1.png" class="kg-image" width="432" height="288" layout="responsive"></amp-img><figcaption>Scatterplot of Tuition and Professor Salary</figcaption></figure><p>As expected, as tuition increases, professors' salaries also increases. From these graphs, I predict that my models will be able to predict college tuition more accurately around 30,000$ because of its lower variability in factors like graduation rate.</p><h3 id="data-preparation">Data Preparation</h3><p>The data.csv file contains the colleges as rows and features (including tuition) as columns. I will be using Pandas for loading data and scikit-learn for preprocessing.</p><pre><code class="language-python">import pandas as pd
+                <p>Welcome to part 1 to a series of posts regarding my college tuition project!</p><figure class="kg-card kg-image-card"></figure><p>In this project, I predict the tuition of colleges around the US using data from the <a href="https://nces.ed.gov/ipeds/use-the-data">National Center for Education Statistics</a>. I chose features I thought would best predict college tuition, such as admission rate, graduation rate, and college location, and I ended up with roughly 20 features.</p><h3 id="data-visualization">Data Visualization</h3><p>Always the first process you should do with your data is to visualize it. Here, I created various plots of tuition vs. various factors I thought would be the best predictors using Seaborn.</p><figure class="kg-card kg-image-card kg-card-hascaption"><figcaption>Histogram of Tuition</figcaption></figure><p>From this graph, I can tell that tuition is right skewed with peak of around 8000$.</p><figure class="kg-card kg-image-card kg-card-hascaption"><figcaption>Scatterplot of Tuition and Admissions Rate</figcaption></figure><p>While admissions rate seems much more varied from 0-20000$, the rate appears to generally decrease.</p><figure class="kg-card kg-image-card kg-card-hascaption"><figcaption>Scatterplot of Tuition and Graduation Rate</figcaption></figure><p>Again, a similar trend where graduation rate varies a lot from 0-20000$ but exhibits an increase afterwards.</p><figure class="kg-card kg-image-card kg-card-hascaption"><figcaption>Scatterplot of Tuition and Professor Salary</figcaption></figure><p>As expected, as tuition increases, professors' salaries also increases. From these graphs, I predict that my models will be able to predict college tuition more accurately around 30,000$ because of its lower variability in factors like graduation rate.</p><h3 id="data-preparation">Data Preparation</h3><p>The data.csv file contains the colleges as rows and features (including tuition) as columns. I will be using Pandas for loading data and scikit-learn for preprocessing.</p><pre><code class="language-python">import pandas as pd
 import joblib
 
 import sklearn.preprocessing as preprocessing
