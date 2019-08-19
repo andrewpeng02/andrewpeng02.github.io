@@ -18,8 +18,8 @@
     <meta property="og:description" content="Welcome to part 1 to a series of posts regarding my college tuition project!In this project, I predict the tuition of colleges around the US using data from the National Center for Education Statistics. I chose features I thought would best predict college tuition, such as admission rate, graduation" />
     <meta property="og:url" content="https://andrewpeng.dev/college-tuition-prediction-1/" />
     <meta property="og:image" content="https://andrewpeng.dev/content/images/2019/08/delfi-de-la-rua-A_InfAQM_lU-unsplash.jpg" />
-    <meta property="article:published_time" content="2019-08-16T21:07:24.000Z" />
-    <meta property="article:modified_time" content="2019-08-18T01:14:38.000Z" />
+    <meta property="article:published_time" content="2019-08-19T02:20:00.000Z" />
+    <meta property="article:modified_time" content="2019-08-19T16:57:04.000Z" />
     <meta property="article:publisher" content="https://www.facebook.com/ghost" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="College Tuition Prediction [1/2]- Data Preparation" />
@@ -28,7 +28,7 @@
     <meta name="twitter:image" content="https://andrewpeng.dev/content/images/2019/08/delfi-de-la-rua-A_InfAQM_lU-unsplash.jpg" />
     <meta name="twitter:label1" content="Written by" />
     <meta name="twitter:data1" content="Andrew Peng" />
-    <meta name="twitter:site" content="tryghost" />
+    <meta name="twitter:site" content="@tryghost" />
     <meta property="og:image:width" content="2000" />
     <meta property="og:image:height" content="1333" />
     
@@ -49,8 +49,8 @@
     },
     "headline": "College Tuition Prediction [1/2]- Data Preparation",
     "url": "https://andrewpeng.dev/college-tuition-prediction-1/",
-    "datePublished": "2019-08-16T21:07:24.000Z",
-    "dateModified": "2019-08-18T01:14:38.000Z",
+    "datePublished": "2019-08-19T02:20:00.000Z",
+    "dateModified": "2019-08-19T16:57:04.000Z",
     "image": {
         "@type": "ImageObject",
         "url": "https://andrewpeng.dev/content/images/2019/08/delfi-de-la-rua-A_InfAQM_lU-unsplash.jpg",
@@ -92,7 +92,7 @@
                 <h1 class="post-title">College Tuition Prediction [1/2]- Data Preparation</h1>
                 <section class="post-meta">
                     <p class="author">by <a href="../../author/andrew/index.html">Andrew Peng</a></p>
-                    <time class="post-date" datetime="2019-08-16">2019-08-16</time>
+                    <time class="post-date" datetime="2019-08-19">2019-08-19</time>
                 </section>
             </header>
             <figure class="post-image">
@@ -100,14 +100,14 @@
             </figure>
             <section class="post-content">
 
-                <p>Welcome to part 1 to a series of posts regarding my college tuition project!</p><figure class="kg-card kg-image-card"></figure><p>In this project, I predict the tuition of colleges around the US using data from the <a href="https://nces.ed.gov/ipeds/use-the-data">National Center for Education Statistics</a>. I chose features I thought would best predict college tuition, such as admission rate, graduation rate, and college location, and I ended up with roughly 20 features.</p><h3 id="data-visualization">Data Visualization</h3><p>Always the first process you should do with your data is to visualize it. Here, I created various plots of tuition vs. various factors I thought would be the best predictors using Seaborn.</p><figure class="kg-card kg-image-card kg-card-hascaption"><figcaption>Histogram of Tuition</figcaption></figure><p>From this graph, I can tell that tuition is right skewed with peak of around 8000$. </p><figure class="kg-card kg-image-card kg-card-hascaption"><figcaption>Scatterplot of Tuition and Admissions Rate</figcaption></figure><p>While admissions rate seems much more varied from 0-20000$, the rate appears to generally decrease.</p><figure class="kg-card kg-image-card kg-card-hascaption"><figcaption>Scatterplot of Tuition and Graduation Rate</figcaption></figure><p>Again, a similar trend where graduation rate varies a lot from 0-20000$ but exhibits an increase afterwards.</p><figure class="kg-card kg-image-card kg-card-hascaption"><figcaption>Scatterplot of Tuition and Professor Salary</figcaption></figure><p>As expected, as tuition increases, professors' salaries also increases. From these graphs, I predict that my models will be able to predict college tuition more accurately around 30,000$ because of its lower variability in factors like graduation rate. </p><h3 id="data-preparation">Data Preparation</h3><p>The data.csv file contains the colleges as rows and features (including tuition) as columns. I will be using Pandas for loading data and scikit-learn for preprocessing.</p><pre><code class="language-Python">import pandas as pd
+                <p>Welcome to part 1 to a series of posts regarding my college tuition project!</p><figure class="kg-card kg-image-card"><amp-img src="https://andrewpeng.dev/content/images/2019/08/delfi-de-la-rua-A_InfAQM_lU-unsplash-1.jpg" class="kg-image" width="2000" height="1333" layout="responsive"></amp-img></figure><p>In this project, I predict the tuition of colleges around the US using data from the <a href="https://nces.ed.gov/ipeds/use-the-data">National Center for Education Statistics</a>. I chose features I thought would best predict college tuition, such as admission rate, graduation rate, and college location, and I ended up with roughly 20 features.</p><h3 id="data-visualization">Data Visualization</h3><p>Always the first process you should do with your data is to visualize it. Here, I created various plots of tuition vs. various factors I thought would be the best predictors using Seaborn.</p><figure class="kg-card kg-image-card kg-card-hascaption"><amp-img src="https://andrewpeng.dev/content/images/2019/08/tuition_hist.png" class="kg-image" width="432" height="288" layout="responsive"></amp-img><figcaption>Histogram of Tuition</figcaption></figure><p>From this graph, I can tell that tuition is right skewed with peak of around 8000$.</p><figure class="kg-card kg-image-card kg-card-hascaption"><amp-img src="https://andrewpeng.dev/content/images/2019/08/tuition_admissions.png" class="kg-image" width="432" height="288" layout="responsive"></amp-img><figcaption>Scatterplot of Tuition and Admissions Rate</figcaption></figure><p>While admissions rate seems much more varied from 0-20000$, the rate appears to generally decrease.</p><figure class="kg-card kg-image-card kg-card-hascaption"><amp-img src="https://andrewpeng.dev/content/images/2019/08/tuition_grad_rate.png" class="kg-image" width="432" height="288" layout="responsive"></amp-img><figcaption>Scatterplot of Tuition and Graduation Rate</figcaption></figure><p>Again, a similar trend where graduation rate varies a lot from 0-20000$ but exhibits an increase afterwards.</p><figure class="kg-card kg-image-card kg-card-hascaption"><amp-img src="https://andrewpeng.dev/content/images/2019/08/tuition_salary-1.png" class="kg-image" width="432" height="288" layout="responsive"></amp-img><figcaption>Scatterplot of Tuition and Professor Salary</figcaption></figure><p>As expected, as tuition increases, professors' salaries also increases. From these graphs, I predict that my models will be able to predict college tuition more accurately around 30,000$ because of its lower variability in factors like graduation rate.</p><h3 id="data-preparation">Data Preparation</h3><p>The data.csv file contains the colleges as rows and features (including tuition) as columns. I will be using Pandas for loading data and scikit-learn for preprocessing.</p><pre><code class="language-python">import pandas as pd
 import joblib
 
 import sklearn.preprocessing as preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
-from sklearn.impute import SimpleImputer</code></pre><p> I removed the colleges that didn't have tuition filled in, as well as the rows which have less than 18 out of the 25 features so that there are enough features to predict tuition. This left about 2900 colleges from the original total of 7000.</p><pre><code class="language-Python">data = pd.read_csv('data/data.csv')
+from sklearn.impute import SimpleImputer</code></pre><p>I removed the colleges that didn't have tuition filled in, as well as the rows which have less than 18 out of the 25 features so that there are enough features to predict tuition. This left about 2900 colleges from the original total of 7000.</p><pre><code class="language-python">data = pd.read_csv('data/data.csv')
 data = data[pd.notnull(data['Tuition and fees'])]
 
 min_fields = 18
@@ -123,11 +123,11 @@ for index, row in data.iterrows():
         data.drop(data.columns[[0, 1, 2]], axis=1, inplace=True)</code></pre><p>Split data into train and test sets using train_test_split() with 80% of the data going into the train set.</p><pre><code>data = data.reset_index(drop=True)
 train, test = train_test_split(data, test_size=0.2)
 X_train, y_train = train.drop(train.columns[[2]], axis=1), train.iloc[:,2]
-X_test, y_test = test.drop(test.columns[[2]], axis=1), test.iloc[:, 2]</code></pre><p>Scale targets between 0 and 1 for faster convergence. While the sklearn libary contains a plethora of scalers, I chose min max scaler because of its simplicity and skewed dataset. I saved the scaler using joblib so I could later scale the predicted targets back.</p><pre><code class="language-Python">scaler = preprocessing.MinMaxScaler()
+X_test, y_test = test.drop(test.columns[[2]], axis=1), test.iloc[:, 2]</code></pre><p>Scale targets between 0 and 1 for faster convergence. While the sklearn libary contains a plethora of scalers, I chose min max scaler because of its simplicity and skewed dataset. I saved the scaler using joblib so I could later scale the predicted targets back.</p><pre><code class="language-python">scaler = preprocessing.MinMaxScaler()
 scaler.fit(y_train.values.reshape(-1, 1))
 y_train, y_test = scaler.transform(y_train.values.reshape(-1, 1)), scaler.transform(y_test.values.reshape(-1, 1))
 joblib.dump(scaler, 'min_max_scaler.pkl')
-</code></pre><p>To encode the numeric features, I defined the columns which had numeric features and a Pipeline from sklearn. I first imputed the data (meaning I replaced missing values with the mean) and then scaled the data. For the categorical features, I instead used a OneHotEncoder in a Pipeline to convert the categories to numeric values. </p><pre><code class="language-Python">numeric_features = X_train.columns[[0, 1] + [i for i in range(4, 24)]]
+</code></pre><p>To encode the numeric features, I defined the columns which had numeric features and a Pipeline from sklearn. I first imputed the data (meaning I replaced missing values with the mean) and then scaled the data. For the categorical features, I instead used a OneHotEncoder in a Pipeline to convert the categories to numeric values.</p><pre><code class="language-python">numeric_features = X_train.columns[[0, 1] + [i for i in range(4, 24)]]
 numeric_trans = Pipeline(steps=[('imputer', SimpleImputer(strategy='mean')),
 ('scaler', preprocessing.MinMaxScaler())])
 
@@ -138,7 +138,7 @@ remainder='passthrough')
 transformer.fit(X_train)
 
 X_train = pd.DataFrame(transformer.transform(X_train))
-X_test = pd.DataFrame(transformer.transform(X_test))</code></pre><p>Now that the data is ready, it's finally time for creating the model in <a href="https://andrewpeng.dev/college-tuition-prediction-1/andrewpeng.dev/college-tuition-prediction-2">Part 2</a>!</p>
+X_test = pd.DataFrame(transformer.transform(X_test))</code></pre><p>Now that the data is ready, it's finally time for creating the model in <a href="https://andrewpeng.dev/college-tuition-prediction-1/andrewpeng.dev/college-tuition-prediction-2">Part 2</a>!</p><p><br /></p><p>Full code is located over on my <a href="https://github.com/andrewpeng02/college-tuition/tree/master">GitHub</a>.</p>
 
             </section>
 
