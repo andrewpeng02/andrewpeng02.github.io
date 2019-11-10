@@ -9,8 +9,8 @@
     <meta name="HandheldFriendly" content="True" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" type="text/css" href="assets/css/screen.css%3Fv=991d5716ad.css" />
-    <link rel="stylesheet" type="text/css" href="assets/css/global.css%3Fv=991d5716ad.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/screen.css%3Fv=8c4cd98178.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/global.css%3Fv=8c4cd98178.css" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,700" rel="stylesheet">
@@ -60,6 +60,7 @@
 
     <meta name="generator" content="Ghost 2.28" />
     <link rel="alternate" type="application/rss+xml" title="Andrew Peng" href="rss/" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css"></link>
 
 </head>
 <body class="home-template">
@@ -77,6 +78,34 @@
     </nav>
 </header>
 <main class="main_minimal" role="main">
+    <article class="card" role="article">
+
+        <div class="card__img-wrapper">
+            <a href="transformer-pytorch/">
+                    <img class="card__img"
+                        srcset="content/images/2019/11/encoder-3-1.png 300w,
+                               content/images/2019/11/encoder-3-1.pngg 600w,
+                              content/images/2019/11/encoder-3-1.pngng 1000w,
+                             content/images/2019/11/encoder-3-1.pngpng 2000w"
+                        sizes="(max-width: 1000px) 400px, 700px"
+                        src="content/images/2019/11/encoder-3-1.png"
+                        alt="Transformer [1/3]- Pytorch&#x27;s nn.Transformer"
+                    />
+            </a>
+        </div>
+
+        <div class="card__content">
+            <header>
+                <h2 class="card__title"><a href="transformer-pytorch/">Transformer [1/3]- Pytorch&#x27;s nn.Transformer</a></h2>
+            </header>
+            <div class="card__desc">
+                <a href="transformer-pytorch/">In part 1 of my series on transformers, I'm going to go over implementing a neural machine translation model using Pytorch's new nn.Transformer module. Transformers, introduced by the paper Attention is All
+                </a>
+            </div>
+            <time class="date" datetime="2019-11-10">10 Nov 2019</time>
+        </div>
+
+    </article>
     <article class="card" role="article">
 
         <div class="card__img-wrapper">
@@ -161,12 +190,17 @@
         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
         crossorigin="anonymous">
     </script>
-    <script type="text/javascript" src="https://andrewpeng.dev/assets/built/jquery.fitvids.js?v=991d5716ad"></script>
+    <script type="text/javascript" src="https://andrewpeng.dev/assets/built/jquery.fitvids.js?v=8c4cd98178"></script>
 
 
     
 
-    
+    <!-- Core -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js"></script>
+
+<!-- All individual language files -->
+<!-- Python syntax highlighting-->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-python.min.js"></script>
 
 </body>
 </html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Transformer [1/3]- Pytorch&#x27;s nn.Transformer</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="../assets/css/screen.css%3Fv=8c4cd98178.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/css/global.css%3Fv=8c4cd98178.css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,700" rel="stylesheet">
+
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+    <link rel="canonical" href="/" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    <link rel="amphtml" href="amp/" />
+    
+    <meta property="og:site_name" content="Andrew Peng" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Transformer [1/3]- Pytorch&#x27;s nn.Transformer" />
+    <meta property="og:description" content="In part 1 of my series on transformers, I&#x27;m going to go over implementing a neural machine translation model using Pytorch&#x27;s new nn.Transformer module. Transformers, introduced by the paper Attention is All You Need, inherently don&#x27;t have a sense of time, They instead rely on positional encoding to encode" />
+    <meta property="og:url" content="https://andrewpeng.dev/transformer-pytorch/" />
+    <meta property="og:image" content="https://andrewpeng.dev/content/images/2019/11/encoder-3-1.png" />
+    <meta property="article:published_time" content="2019-11-10T20:11:25.000Z" />
+    <meta property="article:modified_time" content="2019-11-10T20:11:25.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Transformer [1/3]- Pytorch&#x27;s nn.Transformer" />
+    <meta name="twitter:description" content="In part 1 of my series on transformers, I&#x27;m going to go over implementing a neural machine translation model using Pytorch&#x27;s new nn.Transformer module. Transformers, introduced by the paper Attention is All You Need, inherently don&#x27;t have a sense of time, They instead rely on positional encoding to encode" />
+    <meta name="twitter:url" content="https://andrewpeng.dev/transformer-pytorch/" />
+    <meta name="twitter:image" content="https://andrewpeng.dev/content/images/2019/11/encoder-3-1.png" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Andrew Peng" />
+    <meta property="og:image:width" content="2000" />
+    <meta property="og:image:height" content="1125" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Andrew Peng",
+        "logo": "https://static.ghost.org/v1.0.0/images/ghost-logo.svg"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Andrew Peng",
+        "url": "https://andrewpeng.dev/author/andrew/",
+        "sameAs": []
+    },
+    "headline": "Transformer [1/3]- Pytorch&#x27;s nn.Transformer",
+    "url": "https://andrewpeng.dev/transformer-pytorch/",
+    "datePublished": "2019-11-10T20:11:25.000Z",
+    "dateModified": "2019-11-10T20:11:25.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://andrewpeng.dev/content/images/2019/11/encoder-3-1.png",
+        "width": 2000,
+        "height": 1125
+    },
+    "description": "In part 1 of my series on transformers, I&#x27;m going to go over implementing a neural machine translation model using Pytorch&#x27;s new nn.Transformer module. Transformers, introduced by the paper Attention is All You Need, inherently don&#x27;t have a sense of time, They instead rely on positional encoding to encode",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://andrewpeng.dev/"
+    }
+}
+    </script>
+
+    <meta name="generator" content="Ghost 2.28" />
+    <link rel="alternate" type="application/rss+xml" title="Andrew Peng" href="../rss/" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css"></link>
+
+</head>
+<body class="post-template">
+
+    <div class="wrapper_minimal">
+
+        <header class="header" role="banner">
+    <h1 class="header__title">
+        <a title="Andrew Peng" href='../'>Andrew Peng</a>
+    </h1>
+    <nav class="header__nav" role="navigation">
+        <a class="header__link" href="../">Writing</a>
+        <a class="header__link" href="../project">Projects</a>
+        <a class="header__link" href="../about">About</a>
+    </nav>
+</header>
+
+<main class="main_minimal" role="main">
+    <article class="article__wrapper" role="article">
+
+        <header>
+            <h1 class="post__title">Transformer [1/3]- Pytorch&#x27;s nn.Transformer</h1>
+        </header>
+
+        <section class="post__content-wrapper">
+            <div class="post__content">
+                <p>In part 1 of my series on transformers, I'm going to go over implementing a neural machine translation model using Pytorch's new nn.Transformer module. </p><!--kg-card-begin: image--><figure class="kg-card kg-image-card"><img src="../content/images/2019/11/encoder-3.png" class="kg-image"></figure><!--kg-card-end: image--><p>Transformers, introduced by the paper <a href="https://arxiv.org/abs/1706.03762">Attention is All You Need,</a> inherently don't have a sense of time, They instead rely on <strong>positional encoding </strong>to encode the order of elements. This gives the transformer architecture an important advantage over other language models such as recurrent neural networks: they are parallelizable and easy to expand. This has allowed huge models such as the 1.5 billion parameter <a href="https://openai.com/blog/better-language-models/">GPT-2</a> to achieve state of the art performance on language modelling. </p><h2 id="pytorch">Pytorch</h2><!--kg-card-begin: image--><figure class="kg-card kg-image-card"><img src="../content/images/2019/11/image.png" class="kg-image"></figure><!--kg-card-end: image--><p>Now, with the release of Pytorch 1.2, we can build transformers in pytorch! We'll go over the basics of the transformer architecture and how to use nn.Transformer. In a transformer, the input sentence goes through an encoder where the sentence gets passed through encoders to become memory. Then the output sentence and memory passes through decoders where it outputs the translated sentence. </p><h3 id="the-encoder">The Encoder</h3><!--kg-card-begin: image--><figure class="kg-card kg-image-card"><img src="../content/images/2019/11/encoder-1.png" class="kg-image"></figure><!--kg-card-end: image--><p>First, we tokenize the input data, pad the array if necessary, and convert the tokens to embeddings. </p><!--kg-card-begin: code--><figure class="kg-card kg-code-card"><pre><code class="language-Python">import spacy
+
+# Tokenize sentence
+lang_model = spacy.load('en', disable=['tagger', 'parser', 'ner'])
+sentence = sentence.lower()
+sentence = [tok.text for tok in lang_model.tokenizer(sentence) if tok.text not in punctuation]
+
+# Create a dictionary which maps tokens to indices (train contains all the training sentences)
+freq_list = Counter()
+    for sentence in train:
+        freq_list.update(sentence)
+
+# Convert tokens to indices
+indices = [freq_list[word] for word in sentence if word in freq_list]</code></pre><figcaption>Here, I tokenize the sentence using spacy and convert the sentence to indices</figcaption></figure><!--kg-card-end: code--><!--kg-card-begin: code--><figure class="kg-card kg-code-card"><pre><code class="language-Python">import torch
+from einops import rearrange
+
+self.embed_src = nn.Embedding(vocab_size, d_model)
+src = rearrange(indices, 'n s -&gt; s n')
+src = self.embed_src(src)</code></pre><figcaption>In the LanguageTransformer class, I create an embedding and embed the batch</figcaption></figure><!--kg-card-end: code--><!--kg-card-begin: hr--><hr><!--kg-card-end: hr--><!--kg-card-begin: image--><figure class="kg-card kg-image-card"><img src="../content/images/2019/11/encoder-2.png" class="kg-image"></figure><!--kg-card-end: image--><p>Now we add the positional encoding to the sentences in order to give some order to the words. In the Attention is All You Need model, they use sine and cosine embeddings to give generalizability to longer sentence sizes. </p><!--kg-card-begin: code--><figure class="kg-card kg-code-card"><pre><code class="language-Python">import math 
+self.pos_enc = PositionalEncoding(d_model, pos_dropout, max_seq_length)
+src = self.pos_enc(src * math.sqrt(self.d_model))</code></pre><figcaption>In the LanguageTransformer class, I scale src in order to reduce variance then apply the positional encoding</figcaption></figure><!--kg-card-end: code--><!--kg-card-begin: code--><figure class="kg-card kg-code-card"><pre><code class="language-Python"># Source: https://pytorch.org/tutorials/beginner/transformer_tutorial
+class PositionalEncoding(nn.Module):
+    def __init__(self, d_model, dropout=0.1, max_len=100):
+        super(PositionalEncoding, self).__init__()
+        self.dropout = nn.Dropout(p=dropout)
+
+        pe = torch.zeros(max_len, d_model)
+        position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)
+        div_term = torch.exp(torch.arange(0, d_model, 2).float() * (-math.log(10000.0) / d_model))
+        pe[:, 0::2] = torch.sin(position * div_ter
+        pe[:, 1::2] = torch.cos(position * div_term)
+        pe = pe.unsqueeze(0).transpose(0, 1)
+        self.register_buffer('pe', pe)
+
+    def forward(self, x):
+        x = x + self.pe[:x.size(0), :]
+        return self.dropout(x)</code></pre><figcaption>PositionalEncoding class</figcaption></figure><!--kg-card-end: code--><!--kg-card-begin: hr--><hr><!--kg-card-end: hr--><!--kg-card-begin: image--><figure class="kg-card kg-image-card"><img src="../content/images/2019/11/encoder-3-2.png" class="kg-image"></figure><!--kg-card-end: image--><p>Masking in the encoder is required to make sure any padding doesn't contribute to the self-attention mechanism. In Pytorch, this is done by passing src_key_padding_mask to the transformer. For the example, this looks like [False, False, False, False, False, False, False, True, True, True] where the True positions should be masked. The output of the encoder is called memory. </p><!--kg-card-begin: code--><figure class="kg-card kg-code-card"><pre><code class="language-Python">for i, sentence in enumerate(batch):
+        masks.append([False for _ in range(len(sentence))] + [True for _ in range(seq_length - len(sentence))])
+        batch[i] = sentence + [0 for _ in range(seq_length - len(sentence))]</code></pre><figcaption>Padding and masking is taken care of in the dataset class</figcaption></figure><!--kg-card-end: code--><!--kg-card-begin: hr--><hr><!--kg-card-end: hr--><h3 id="the-decoder">The Decoder</h3><!--kg-card-begin: image--><figure class="kg-card kg-image-card"><img src="../content/images/2019/11/decoder-1.png" class="kg-image"></figure><!--kg-card-end: image--><p>Now we can move onto the decoder architecture. The initial steps are very similar to that of the encoder. We embed and pass all but the very last token of each sentence into the decoders. </p><!--kg-card-begin: code--><figure class="kg-card kg-code-card"><pre><code class="language-Python">self.embed_tgt = nn.Embedding(vocab_size, d_model)
+
+tgt_inp = tgt[:, :-1]
+tgt = rearrange(tgt_inp, 'n t -&gt; t n')
+tgt = self.pos_enc(self.embed_tgt(tgt) * math.sqrt(self.d_model))</code></pre><figcaption>In the LanguageTransformer class, we embed and encode the target sequence</figcaption></figure><!--kg-card-end: code--><!--kg-card-begin: hr--><hr><!--kg-card-end: hr--><!--kg-card-begin: image--><figure class="kg-card kg-image-card"><img src="../content/images/2019/11/decoder-2.png" class="kg-image"></figure><!--kg-card-end: image--><p>We then pass these sequences through m decoders.  In each decoder, the sequences propagate through self attention and then attention with the memory (from the encoder). So the decoder requires 3 masks: </p><ol><li>tgt_mask: Used in the self-attention, it ensures the decoder doesn't look at future tokens from a given subsequence. This looks like [[0 -inf -inf ... ], [0 0 -inf ...] ... [0 0 0 ...]]</li><li>tgt_key_padding_mask: Also used in the self-attention, it ensures that the padding in the target sequence isn't accounted for. </li><li>memory_key_padding_mask: Used in the attention with the memory, it ensures the padding in the memory isn't used. This is the same as the src_key_padding_mask</li></ol><!--kg-card-begin: code--><figure class="kg-card kg-code-card"><pre><code class="language-Python">def gen_nopeek_mask(length):
+    mask = rearrange(torch.triu(torch.ones(length, length)) == 1, 'h w -&gt; w h')
+    mask = mask.float().masked_fill(mask == 0, float('-inf')).masked_fill(mask == 1, float(0.0))
+
+    return mask
+
+memory_key_padding_mask = src_key_padding_mask.clone()
+tgt_mask = gen_nopeek_mask(tgt_inp.shape[1]).to('cuda')</code></pre><figcaption>This is in the train method. src_key_padding_mask and tgt_key_padding_mask is expected from the dataloader</figcaption></figure><!--kg-card-end: code--><p>Afterwards, we pass each of the output sequences through a fully connected layer that outputs a probability for each token in the vocab size. </p><!--kg-card-begin: code--><figure class="kg-card kg-code-card"><pre><code class="language-Python">self.transformer = nn.Transformer(d_model, nhead, num_encoder_layers, num_decoder_layers, dim_feedforward, trans_dropout)
+
+output = self.transformer(src, tgt, tgt_mask=tgt_mask, src_key_padding_mask=src_key_padding_mask,
+                                  tgt_key_padding_mask=tgt_key_padding_mask, memory_key_padding_mask=memory_key_padding_mask)
+output = rearrange(output, 't n e -&gt; n t e')
+output = self.fc(output)</code></pre><figcaption>This is in the LanguageTransformer class</figcaption></figure><!--kg-card-end: code--><p>And here is the completed LanguageTransformer class!</p><!--kg-card-begin: code--><pre><code class="language-Python">class LanguageTransformer(nn.Module):
+    def __init__(self, vocab_size, d_model, nhead, num_encoder_layers, num_decoder_layers, dim_feedforward, max_seq_length, pos_dropout, trans_dropout):
+        super().__init__()
+        self.d_model = d_model
+        self.embed_src = nn.Embedding(vocab_size, d_model)
+        self.embed_tgt = nn.Embedding(vocab_size, d_model)
+        self.pos_enc = PositionalEncoding(d_model, pos_dropout, max_seq_length)
+
+        self.transformer = nn.Transformer(d_model, nhead, num_encoder_layers, num_decoder_layers, dim_feedforward, trans_dropout)
+        self.fc = nn.Linear(d_model, vocab_size)
+
+    def forward(self, src, tgt, src_key_padding_mask, tgt_key_padding_mask, memory_key_padding_mask, tgt_mask):
+        src = rearrange(src, 'n s -&gt; s n')
+        tgt = rearrange(tgt, 'n t -&gt; t n')
+        src = self.pos_enc(self.embed_src(src) * math.sqrt(self.d_model))
+        tgt = self.pos_enc(self.embed_tgt(tgt) * math.sqrt(self.d_model))
+
+        output = self.transformer(src, tgt, tgt_mask=tgt_mask, src_key_padding_mask=src_key_padding_mask,
+                                  tgt_key_padding_mask=tgt_key_padding_mask, memory_key_padding_mask=memory_key_padding_mask)
+        output = rearrange(output, 't n e -&gt; n t e')
+        return self.fc(output)</code></pre><!--kg-card-end: code--><!--kg-card-begin: hr--><hr><!--kg-card-end: hr--><h3 id="results">Results</h3><p>I used the tatoeba dataset, a small dataset with around 160000 english to french language pairs available <a href="http://www.manythings.org/anki/">here</a>. </p><!--kg-card-begin: image--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="../content/images/2019/11/data.png" class="kg-image"><figcaption>A relatively small dataset with short sentences</figcaption></figure><!--kg-card-end: image--><p>Here are the results of training for 20 epochs:</p><!--kg-card-begin: image--><figure class="kg-card kg-image-card"><img src="../content/images/2019/11/Losses-and-Time.png" class="kg-image"></figure><!--kg-card-end: image--><p>My model achieves a validation loss of 0.99. However, it starts overfitting around epoch 15 based from the validation loss being higher than the train loss. And finally, some results of translating sentences:</p><!--kg-card-begin: markdown--><p>I am giving you a gift.: Je vous donne un cadeau.<br>
+How did you find that?: Comment l'as-tu trouvée?<br>
+I'm going to run to your house.: Je vais courir à votre maison.</p>
+<!--kg-card-end: markdown--><p>Some improvements that could be made:</p><ol><li>Using beam search to translate sentences</li><li>Running the model on larger datasets </li><li>Using torchtext instead of hacking my own dataset class to get more consistent batches</li><li>Using smoothened loss</li></ol><p>My code is located <a href="https://github.com/andrewpeng02/transformer-translation">here</a>. </p>
+            </div>
+        </section>
+
+
+
+    </article>
+
+    <nav class="post__footer" role="navigation">
+        <div class="footer__wrapper">
+            <div class="footer__wrapper-inner">
+
+                <div class="footer__link-prev">
+                    <a class="footer__link-anchor" href="../college-tuition-prediction-2/" rel="prev">
+                        <object class="footer__link-icon-left">
+                            <embed src="../assets/icons/arrow-left.svg" />
+                        </object>
+                        <p class="footer__link-label">Previous</p>
+                        <h3 class="footer__title-article">College Tuition Prediction [2/2]- Model</h3>
+                    </a>
+                </div>
+
+
+            </div>
+        </div>
+    </nav>
+</main>
+
+
+<footer class="footer" role="contentinfo">
+    <div>Copyright &copy; 2019 <a href="../">Andrew Peng</a> &bull; All rights reserved.</div>
+</footer>
+
+    </div>
+
+    <script>
+        var images = document.querySelectorAll('.kg-gallery-image img');
+        images.forEach(function (image) {
+            var container = image.closest('.kg-gallery-image');
+            var width = image.attributes.width.value;
+            var height = image.attributes.height.value;
+            var ratio = width / height;
+            container.style.flex = ratio + ' 1 0%';
+        })
+    </script>
+
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="https://andrewpeng.dev/assets/built/jquery.fitvids.js?v=8c4cd98178"></script>
+
+
+    
+
+    <!-- Core -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js"></script>
+
+<!-- All individual language files -->
+<!-- Python syntax highlighting-->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-python.min.js"></script>
+
+</body>
+</html>
