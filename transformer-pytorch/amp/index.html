@@ -19,7 +19,7 @@
     <meta property="og:url" content="https://andrewpeng.dev/transformer-pytorch/" />
     <meta property="og:image" content="https://andrewpeng.dev/content/images/2019/11/encoder-3-1.png" />
     <meta property="article:published_time" content="2019-11-10T20:11:25.000Z" />
-    <meta property="article:modified_time" content="2019-11-10T20:11:25.000Z" />
+    <meta property="article:modified_time" content="2019-11-26T02:16:27.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Transformer [1/3]- Pytorch&#x27;s nn.Transformer" />
     <meta name="twitter:description" content="In part 1 of my series on transformers, I&#x27;m going to go over implementing a neural machine translation model using Pytorch&#x27;s new nn.Transformer module. Transformers, introduced by the paper Attention is All You Need, inherently don&#x27;t have a sense of time, They instead rely on positional encoding to encode" />
@@ -48,7 +48,7 @@
     "headline": "Transformer [1/3]- Pytorch&#x27;s nn.Transformer",
     "url": "https://andrewpeng.dev/transformer-pytorch/",
     "datePublished": "2019-11-10T20:11:25.000Z",
-    "dateModified": "2019-11-10T20:11:25.000Z",
+    "dateModified": "2019-11-26T02:16:27.000Z",
     "image": {
         "@type": "ImageObject",
         "url": "https://andrewpeng.dev/content/images/2019/11/encoder-3-1.png",
@@ -175,7 +175,7 @@ output = self.fc(output)</code></pre><figcaption>This is in the LanguageTransfor
         return self.fc(output)</code></pre><hr></hr><h3 id="results">Results</h3><p>I used the tatoeba dataset, a small dataset with around 160000 english to french language pairs available <a href="http://www.manythings.org/anki/">here</a>. </p><figure class="kg-card kg-image-card kg-card-hascaption"><figcaption>A relatively small dataset with short sentences</figcaption></figure><p>Here are the results of training for 20 epochs:</p><figure class="kg-card kg-image-card"></figure><p>My model achieves a validation loss of 0.99. However, it starts overfitting around epoch 15 based from the validation loss being higher than the train loss. And finally, some results of translating sentences:</p><p>I am giving you a gift.: Je vous donne un cadeau.<br />
 How did you find that?: Comment l'as-tu trouvée?<br />
 I'm going to run to your house.: Je vais courir à votre maison.</p>
-<p>Some improvements that could be made:</p><ol><li>Using beam search to translate sentences</li><li>Running the model on larger datasets </li><li>Using torchtext instead of hacking my own dataset class to get more consistent batches</li><li>Using smoothened loss</li></ol><p>My code is located <a href="https://github.com/andrewpeng02/transformer-translation">here</a>. </p>
+<hr></hr><h2 id="further-research">Further Research</h2><p>Some improvements that could be made:</p><ol><li>Using beam search to translate sentences</li><li>Running the model on larger datasets </li><li>Using torchtext instead of hacking my own dataset class to get more consistent batches</li><li>Using smoothened loss</li></ol><p>My code is located <a href="https://github.com/andrewpeng02/transformer-translation">here</a>. </p>
 
             </section>
 
