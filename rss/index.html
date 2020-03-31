@@ -1,4 +1,198 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Andrew Peng]]></title><description><![CDATA[Andrew Peng's Blog]]></description><link>https://andrewpeng.dev/</link><image><url>https://andrewpeng.dev/favicon.png</url><title>Andrew Peng</title><link>https://andrewpeng.dev/</link></image><generator>Ghost 2.28</generator><lastBuildDate>Sun, 01 Mar 2020 19:56:00 GMT</lastBuildDate><atom:link href="https://andrewpeng.dev/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Deep Reinforcement Learning [1/4]- Deep Q Learning]]></title><description><![CDATA[<p>Welcome to my first post in a series on deep reinforcement learning in Pytorch. Reinforcement learning is a branch of machine learning dealing with agents and how they make decisions in an environment. RL can be used to play games from snake to <a href="https://deepmind.com/blog/article/alphastar-mastering-real-time-strategy-game-starcraft-ii">Starcraft</a> or even to trade stocks. </p><!--kg-card-begin: html--><iframe src="https://giphy.com/embed/ZaWuYUwkdzIMozwsvR" width="480" height="320" frameborder="0" class="giphy-embed" allowfullscreen></iframe><center><font size="3">OpenAI</font></center>]]></description><link>https://andrewpeng.dev/deeprl-dql/</link><guid isPermaLink="false">5e49a6b661f14b1e187d36c8</guid><dc:creator><![CDATA[Andrew Peng]]></dc:creator><pubDate>Sun, 01 Mar 2020 19:54:24 GMT</pubDate><media:content url="https://andrewpeng.dev/content/images/2020/03/Screenshot-from-2020-03-01-13-53-50.png" medium="image"/><content:encoded><![CDATA[<img src="https://andrewpeng.dev/content/images/2020/03/Screenshot-from-2020-03-01-13-53-50.png" alt="Deep Reinforcement Learning [1/4]- Deep Q Learning"><p>Welcome to my first post in a series on deep reinforcement learning in Pytorch. Reinforcement learning is a branch of machine learning dealing with agents and how they make decisions in an environment. RL can be used to play games from snake to <a href="https://deepmind.com/blog/article/alphastar-mastering-real-time-strategy-game-starcraft-ii">Starcraft</a> or even to trade stocks. </p><!--kg-card-begin: html--><iframe src="https://giphy.com/embed/ZaWuYUwkdzIMozwsvR" width="480" height="320" frameborder="0" class="giphy-embed" allowfullscreen></iframe><center><font size="3">OpenAI Gym's Lunar Lander Environment</font></center><!--kg-card-end: html--><p>In this post, I'm going to teach you how to implement deep q learning, a simple deep reinforcement learning algorithm, in Pytorch. </p><!--kg-card-begin: hr--><hr><!--kg-card-end: hr--><h2 id="terminology">Terminology</h2><p>The environment is where the agent makes decisions, which is represented by a state vector. The goal of the agent is to maximize total reward. </p><!--kg-card-begin: image--><figure class="kg-card kg-image-card"><img src="https://andrewpeng.dev/content/images/2020/02/env_step.png" class="kg-image" alt="Deep Reinforcement Learning [1/4]- Deep Q Learning"></figure><!--kg-card-end: image--><p>At timestep \(t=0\), the environment has a state \(s_0\). The agent then takes an action \(a_0\) according to a policy \(\pi\) (which just tells the agent to take an action from a given state), and receives a reward \(r_0\) and the next state \(s_1\). One way of finding a good policy is using deep Q learning. Each episode consists of all state, actions, and rewards from beginning to end.</p><!--kg-card-begin: hr--><hr><!--kg-card-end: hr--><h2 id="the-algorithm">The Algorithm</h2><p>Reinforcement learning using neural networks is unstable and difficult to train. However, <a href="https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf">deep Q learning</a> introduces several improvements which makes deep reinforcement learning more feasible:</p><ol><li>It uses a replay buffer, which stores the last \(n\) experiences that consist of a state, action, reward, next state, and done tuple. The learning is based by sampling minibatches from the replay buffer, thereby removing the high correlation between experiences.</li><li>It uses off-policy learning. There are 2 Q networks, a local (which is being optimized) and a target (periodically updated by the local network) network. Learning off-policy helps decrease correlation between the local and target expected rewards (explained later). </li></ol><h3 id="q-networks">Q Networks</h3><!--kg-card-begin: image--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://andrewpeng.dev/content/images/2020/02/nn-1.png" class="kg-image" alt="Deep Reinforcement Learning [1/4]- Deep Q Learning"><figcaption>Example Q network for the Lunar Lander environment</figcaption></figure><!--kg-card-end: image--><p>In deep Q learning, Q networks are neural networks trained to select the best action. The input to a Q network is the state vector \(s\) and the output is the action vector \(a\). We train the Q network to output the expected return of each action given a state, so that the action with the highest expected return should be selected. The expected return is just the sum \(\sum_{i=0}^{j} P(R_i) * R_i\) where \(R_i=r_t+r_{t+1}+r_{t+2}...\). </p><!--kg-card-begin: code--><figure class="kg-card kg-code-card"><pre><code class="language-Python">class DQNModel(nn.Module):
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Andrew Peng]]></title><description><![CDATA[Andrew Peng's Blog]]></description><link>https://andrewpeng.dev/</link><image><url>https://andrewpeng.dev/favicon.png</url><title>Andrew Peng</title><link>https://andrewpeng.dev/</link></image><generator>Ghost 2.28</generator><lastBuildDate>Tue, 31 Mar 2020 19:59:00 GMT</lastBuildDate><atom:link href="https://andrewpeng.dev/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Visualizing Vector Fields and Flow Lines using Matplotlib]]></title><description><![CDATA[<p>Using Matplotlib, a python plotting library, I figured out how to graph both 2d and 3d vector fields along with their associated <strong>flow lines</strong>. Intuitively, flow lines are curves which you get by starting at a point and tracing in the direction of the vector field. This is the path</p>]]></description><link>https://andrewpeng.dev/visualizing-vector-fields-and-flow-lines/</link><guid isPermaLink="false">5e83799e6f9d083a08d6e657</guid><dc:creator><![CDATA[Andrew Peng]]></dc:creator><pubDate>Tue, 31 Mar 2020 19:58:19 GMT</pubDate><media:content url="https://andrewpeng.dev/content/images/2020/03/3-3.png" medium="image"/><content:encoded><![CDATA[<img src="https://andrewpeng.dev/content/images/2020/03/3-3.png" alt="Visualizing Vector Fields and Flow Lines using Matplotlib"><p>Using Matplotlib, a python plotting library, I figured out how to graph both 2d and 3d vector fields along with their associated <strong>flow lines</strong>. Intuitively, flow lines are curves which you get by starting at a point and tracing in the direction of the vector field. This is the path a particle would take in a vector field. </p><p>The formal definition of a flow line is this: Let \(\textbf{F}\) be a vector field and \(\textbf{x}(t)\) be the flow line. Then \( \textbf{x}'(t) = \textbf{F}(\textbf{x}(t)) \). In other words, at every point on the path \(\textbf{x}\), \(\textbf{x}\) is tangent to the vector field \(\mathbf{F}\).</p><!--kg-card-begin: image--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://andrewpeng.dev/content/images/2020/03/3-1.png" class="kg-image" alt="Visualizing Vector Fields and Flow Lines using Matplotlib"><figcaption>The vector field \( \textbf{F}(x,y)=(1, x+y)\) with a flow line (green) through the point (0,0).</figcaption></figure><!--kg-card-end: image--><h2 id="graphing-in-2d">Graphing in 2d</h2><!--kg-card-begin: hr--><hr><!--kg-card-end: hr--><h3 id="graphing-a-simple-vector-field">Graphing a simple vector field</h3><p>First, we must import all of our dependencies, which are matplotlib and numpy.</p><!--kg-card-begin: code--><pre><code class="language-Python">import matplotlib.pyplot as plt
+import numpy as np</code></pre><!--kg-card-end: code--><p>Now we have to define the x and y components of our vector field as a function of  the point (x,y).  In this case, \(\text{F}(x, y) = (y, -x)\). We also define the x and y bounds as well as our step size (which defines our 'grid' of vectors) and scale (which scales the vectors in the graph).</p><!--kg-card-begin: code--><pre><code class="language-Python ">vf_x = lambda x, y: y
+vf_y = lambda x, y: -x
+
+x_lim = (-10, 10)
+y_lim = (-10, 10)
+
+step = 2
+scale = 3</code></pre><!--kg-card-end: code--><p>We create a grid using np.meshgrid, where each point in the grid is given by (X[i, j], Y[i, j]), where i and j are indices. We then assign the x component of every vector in the grid to U and the y component to V using our vector field function defined earlier. Matplotlib's quiver function creates the vector field. </p><!--kg-card-begin: code--><pre><code class="language-Python">X, Y = np.meshgrid(np.arange(x_lim[0], x_lim[1], step), np.arange(y_lim[0], y_lim[1], step))
+U = np.zeros(X.shape)
+V = np.zeros(Y.shape)
+
+for i in range(X.shape[0]):
+	for j in range(Y.shape[0]):
+        U[i,j] = vf_x(X[i, j], Y[i, j])
+        V[i,j] = vf_y(X[i, j], Y[i, j])
+        
+fig, ax = plt.subplots(figsize=(20, 20))
+_ = ax.quiver(X, Y, U, V, units='xy', scale=scale, color='red')
+
+plt.xlim(x_lim)
+plt.ylim(y_lim)</code></pre><!--kg-card-end: code--><p>Finally, we can plot the vector field and make it look at bit nicer.</p><!--kg-card-begin: code--><pre><code class="language-Python">ax.set_xticks(np.arange(x_lim[0], x_lim[1], 1))
+ax.set_yticks(np.arange(y_lim[0], y_lim[1], 1))
+ax.set_aspect('equal')
+
+# Move axis to the middle
+ax.spines['left'].set_position('zero')
+
+ax.spines['right'].set_color('none')
+ax.yaxis.tick_left()
+
+ax.spines['bottom'].set_position('zero')
+
+ax.spines['top'].set_color('none')
+ax.xaxis.tick_bottom()
+plt.grid()
+
+plt.show()
+plt.close()</code></pre><!--kg-card-end: code--><p>This is the final result!</p><!--kg-card-begin: image--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://andrewpeng.dev/content/images/2020/03/1-2.png" class="kg-image" alt="Visualizing Vector Fields and Flow Lines using Matplotlib"><figcaption>The vector field \( \textbf{F}(x,y)=(y, -x)\) with step=2 and scale=3</figcaption></figure><!--kg-card-end: image--><h3 id="graphing-functions">Graphing Functions</h3><p>We can also graph functions using plt.plot, including flow lines. func_x is an array of x values, and func_y is an array of y values.</p><!--kg-card-begin: code--><pre><code class="language-Python">plt.plot(func_x, func_y, 'g')</code></pre><!--kg-card-end: code--><p>For example, this plots the flowline through (0, 0) for the vector field \( \textbf{F}(x, y) = (1, x+y)\). </p><!--kg-card-begin: code--><figure class="kg-card kg-code-card"><pre><code class="language-Python">func_x = np.arange(-10, 10, 0.2)
+func_y = 1*np.exp(func_x) - func_x - 1</code></pre><figcaption>The equation for the flow line is \(y=e^x - x -1\) (not derived)</figcaption></figure><!--kg-card-end: code--><!--kg-card-begin: image--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://andrewpeng.dev/content/images/2020/03/3-1-1.png" class="kg-image" alt="Visualizing Vector Fields and Flow Lines using Matplotlib"><figcaption>The vector field \( \textbf{F}(x, y) = (1, x+y)\) with a flow line through (0, 0)</figcaption></figure><!--kg-card-end: image--><h3 id="graphing-flow-lines-using-euler-s-method">Graphing Flow Lines using Euler's Method</h3><p>What if we can't find the equation to the flow line directly? We can use <a href="http://tutorial.math.lamar.edu/Classes/DE/EulersMethod.aspx">Euler's method</a>, and the premise behind Euler's method is this:</p><ol><li>Start at point (x, y)</li><li>Find the derivative, or slope, at (x, y). The vector field already gives us the x and y components of the derivative!</li><li>Take a step in the direction of the derivative, and get a new point (x, y)</li><li>Repeat steps 1-3 until either x or y are outside the desired bounds</li></ol><p>In python, it looks like this:</p><!--kg-card-begin: code--><pre><code class="language-Python">def numerically_find_flow_line_2d(starting_point, step, vf_x, vf_y, x_lim, y_lim):
+    func_x = []
+    func_y = []
+    
+    # Find the points to the "right" of the point
+    x = starting_point[0]
+    y = starting_point[1]
+    while True:
+        func_x.append(x)
+        func_y.append(y)
+        
+        delta_x = vf_x(x, y)
+        delta_y = vf_y(x, y)
+        
+        # Normalize to unit vector and scale by 1/step
+        magnitude = np.sqrt(delta_x ** 2 + delta_y ** 2)
+        delta_x = delta_x / magnitude * step
+        delta_y = delta_y / magnitude * step
+        
+        # Get the new point
+        x = x + delta_x
+        y = y + delta_y
+        
+        # Break if either x or y is outside of bounds
+        if x &gt; x_lim[1] or x &lt; x_lim[0] or y &gt; y_lim[1] or y &lt; y_lim[0]:
+            break
+        
+        # Break if it's taking too long for the curve to leave the bounds
+        if len(func_x) &gt; 10000:
+            break
+    
+    # Find the points to the "left" of the point- nearly identical 
+    x = starting_point[0]
+    y = starting_point[1]
+    while True:
+    	Here, we insert at the front because these points occur before the starting point instead of the back
+        func_x.insert(0, x)
+        func_y.insert(0, y)
+        
+        delta_x = vf_x(x, y)
+        delta_y = vf_y(x, y)
+        
+        magnitude = np.sqrt(delta_x ** 2 + delta_y ** 2)
+        delta_x = delta_x / magnitude * step
+        delta_y = delta_y / magnitude * step
+        
+        # Here, we subtract delta instead of add
+        x = x - delta_x
+        y = y - delta_y
+        
+        if x &gt; 5 or x &lt; -5 or y &gt; 5 or y &lt; -5:
+            break
+        if len(func_x) &gt; 20000:
+            break 
+    
+    return func_x, func_y</code></pre><!--kg-card-end: code--><p>Here's the result- it looks identical to the graph we generated by manually finding the flow line! As long as the step size is sufficiently large, the numerically generated flow line should be close to the actual flow line.</p><!--kg-card-begin: image--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://andrewpeng.dev/content/images/2020/03/a.png" class="kg-image" alt="Visualizing Vector Fields and Flow Lines using Matplotlib"><figcaption>The vector field \( \textbf{F}(x, y) = (1, x+y)\) with a flow line through (0, 0)</figcaption></figure><!--kg-card-end: image--><h2 id="graphing-in-3d">Graphing in 3d</h2><!--kg-card-begin: hr--><hr><!--kg-card-end: hr--><p>Well, can we graph vector fields in 3d? Yes! To graph in 3d, we have to add a special import which we will use to create a 3d axis. Other than that, all we have to do is add an extra variable.</p><!--kg-card-begin: code--><pre><code class="language-Python">from mpl_toolkits.mplot3d import Axes3D
+def make_vf_3d(x_lim, y_lim, z_lim, step, vf_x, vf_y, vf_z, length, func_xs=None, func_ys=None, func_zs=None):
+    X, Y, Z = np.meshgrid(np.arange(x_lim[0], x_lim[1], step), 
+                          np.arange(y_lim[0], y_lim[1], step), 
+                          np.arange(z_lim[0], z_lim[1], step))
+    U = np.zeros(X.shape)
+    V = np.zeros(Y.shape)
+    W = np.zeros(Z.shape)
+    
+    # Assign vector components to the U, V, and W arrays
+    for i in range(X.shape[0]):
+        for j in range(Y.shape[0]):
+                for k in range(Z.shape[0]):
+                    U[i, j, k] = vf_x(X[i, j, k], Y[i, j, k], Z[i, j, k])
+                    V[i, j, k] = vf_y(X[i, j, k], Y[i, j, k], Z[i, j, k])
+                    W[i, j, k] = vf_z(X[i, j, k], Y[i, j, k], Z[i, j, k])
+
+    fig = plt.figure(figsize=(10, 10))
+    # 3d projection
+    ax = fig.gca(projection='3d')
+    
+    # Plot the vector field
+    ax.quiver(X, Y, Z, U, V, W, length=length, color='red')
+    if func_x is not None:
+       plt.plot(func_x, func_y, func_z, 'g')
+        
+    ax.set_xlim3d(x_lim)
+    ax.set_xlim3d(y_lim)
+    ax.set_zlim3d(z_lim)
+    plt.grid()
+    
+    plt.show()
+    plt.close()</code></pre><!--kg-card-end: code--><p>We can also use Euler's method in 3d as well. It's the same as the 2d way, but we're adding a z variable.</p><!--kg-card-begin: code--><pre><code class="language-Python">def numerically_find_flow_line_3d(starting_point, step, vf_x, vf_y, vf_z, x_lim, y_lim, z_lim):
+    func_x = []
+    func_y = []
+    func_z = []
+    
+    # Find points to the "right" of the starting point
+    x = starting_point[0]
+    y = starting_point[1]
+    z = starting_point[2]
+    while True:
+        func_x.append(x)
+        func_y.append(y)
+        func_z.append(z)
+
+        delta_x = vf_x(x, y, z)
+        delta_y = vf_y(x, y, z)
+        delta_z = vf_z(x, y, z)
+        
+        # Scale the deltas
+        magnitude = np.sqrt(delta_x ** 2 + delta_y ** 2 + delta_z ** 2)
+        delta_x = delta_x / magnitude * step
+        delta_y = delta_y / magnitude * step
+        delta_z = delta_z / magnitude * step
+
+		# Find the new point
+        x = x + delta_x
+        y = y + delta_y
+        z = z + delta_z
+        
+        # Break if the x, y, or z variable is out of bounds
+        if x &gt; x_lim[1] or x &lt; x_lim[0] or \
+           y &gt; y_lim[1] or y &lt; y_lim[0] or \
+           z &gt; z_lim[1] or z &lt; z_lim[0]:
+            break
+            
+        # Break if it's taking too long
+        if len(func_x) &gt; 50000:
+            break
+    
+    # Find points to the "left" of the starting point
+    x = starting_point[0]
+    y = starting_point[1]
+    z = starting_point[2]
+    while True:
+        func_x.insert(0, x)
+        func_y.insert(0, y)
+        func_z.insert(0, z)
+
+        delta_x = vf_x(x, y, z)
+        delta_y = vf_y(x, y, z)
+        delta_z = vf_z(x, y, z)
+        
+        magnitude = np.sqrt(delta_x ** 2 + delta_y ** 2 + delta_z ** 2)
+        delta_x = delta_x / magnitude * step
+        delta_y = delta_y / magnitude * step
+        delta_z = delta_z / magnitude * step
+
+        x = x - delta_x
+        y = y - delta_y
+        z = z - delta_z
+        
+        if x &gt; x_lim[1] or x &lt; x_lim[0] or \
+           y &gt; y_lim[1] or y &lt; y_lim[0] or \
+           z &gt; z_lim[1] or z &lt; z_lim[0]:
+            break
+        if len(func_x) &gt; 100000:
+            break
+    
+    return func_x, func_y, func_z</code></pre><!--kg-card-end: code--><p>Here is a result:</p><!--kg-card-begin: image--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://andrewpeng.dev/content/images/2020/03/b.png" class="kg-image" alt="Visualizing Vector Fields and Flow Lines using Matplotlib"><figcaption>Graphing the vector field \( \textbf{F}(x, y, z) = (x, 0, 3)\) with two different flow lines starting at \((1, 1, 2)\) and \((-3, 0, 2)\)</figcaption></figure><!--kg-card-end: image-->]]></content:encoded></item><item><title><![CDATA[Deep Reinforcement Learning [1/4]- Deep Q Learning]]></title><description><![CDATA[<p>Welcome to my first post in a series on deep reinforcement learning in Pytorch. Reinforcement learning is a branch of machine learning dealing with agents and how they make decisions in an environment. RL can be used to play games from snake to <a href="https://deepmind.com/blog/article/alphastar-mastering-real-time-strategy-game-starcraft-ii">Starcraft</a> or even to trade stocks. </p><!--kg-card-begin: html--><iframe src="https://giphy.com/embed/ZaWuYUwkdzIMozwsvR" width="480" height="320" frameborder="0" class="giphy-embed" allowfullscreen></iframe><center><font size="3">OpenAI</font></center>]]></description><link>https://andrewpeng.dev/deeprl-dql/</link><guid isPermaLink="false">5e49a6b661f14b1e187d36c8</guid><dc:creator><![CDATA[Andrew Peng]]></dc:creator><pubDate>Sun, 01 Mar 2020 19:54:24 GMT</pubDate><media:content url="https://andrewpeng.dev/content/images/2020/03/Screenshot-from-2020-03-01-13-53-50.png" medium="image"/><content:encoded><![CDATA[<img src="https://andrewpeng.dev/content/images/2020/03/Screenshot-from-2020-03-01-13-53-50.png" alt="Deep Reinforcement Learning [1/4]- Deep Q Learning"><p>Welcome to my first post in a series on deep reinforcement learning in Pytorch. Reinforcement learning is a branch of machine learning dealing with agents and how they make decisions in an environment. RL can be used to play games from snake to <a href="https://deepmind.com/blog/article/alphastar-mastering-real-time-strategy-game-starcraft-ii">Starcraft</a> or even to trade stocks. </p><!--kg-card-begin: html--><iframe src="https://giphy.com/embed/ZaWuYUwkdzIMozwsvR" width="480" height="320" frameborder="0" class="giphy-embed" allowfullscreen></iframe><center><font size="3">OpenAI Gym's Lunar Lander Environment</font></center><!--kg-card-end: html--><p>In this post, I'm going to teach you how to implement deep q learning, a simple deep reinforcement learning algorithm, in Pytorch. </p><!--kg-card-begin: hr--><hr><!--kg-card-end: hr--><h2 id="terminology">Terminology</h2><p>The environment is where the agent makes decisions, which is represented by a state vector. The goal of the agent is to maximize total reward. </p><!--kg-card-begin: image--><figure class="kg-card kg-image-card"><img src="https://andrewpeng.dev/content/images/2020/02/env_step.png" class="kg-image" alt="Deep Reinforcement Learning [1/4]- Deep Q Learning"></figure><!--kg-card-end: image--><p>At timestep \(t=0\), the environment has a state \(s_0\). The agent then takes an action \(a_0\) according to a policy \(\pi\) (which just tells the agent to take an action from a given state), and receives a reward \(r_0\) and the next state \(s_1\). One way of finding a good policy is using deep Q learning. Each episode consists of all state, actions, and rewards from beginning to end.</p><!--kg-card-begin: hr--><hr><!--kg-card-end: hr--><h2 id="the-algorithm">The Algorithm</h2><p>Reinforcement learning using neural networks is unstable and difficult to train. However, <a href="https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf">deep Q learning</a> introduces several improvements which makes deep reinforcement learning more feasible:</p><ol><li>It uses a replay buffer, which stores the last \(n\) experiences that consist of a state, action, reward, next state, and done tuple. The learning is based by sampling minibatches from the replay buffer, thereby removing the high correlation between experiences.</li><li>It uses off-policy learning. There are 2 Q networks, a local (which is being optimized) and a target (periodically updated by the local network) network. Learning off-policy helps decrease correlation between the local and target expected rewards (explained later). </li></ol><h3 id="q-networks">Q Networks</h3><!--kg-card-begin: image--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="https://andrewpeng.dev/content/images/2020/02/nn-1.png" class="kg-image" alt="Deep Reinforcement Learning [1/4]- Deep Q Learning"><figcaption>Example Q network for the Lunar Lander environment</figcaption></figure><!--kg-card-end: image--><p>In deep Q learning, Q networks are neural networks trained to select the best action. The input to a Q network is the state vector \(s\) and the output is the action vector \(a\). We train the Q network to output the expected return of each action given a state, so that the action with the highest expected return should be selected. The expected return is just the sum \(\sum_{i=0}^{j} P(R_i) * R_i\) where \(R_i=r_t+r_{t+1}+r_{t+2}...\). </p><!--kg-card-begin: code--><figure class="kg-card kg-code-card"><pre><code class="language-Python">class DQNModel(nn.Module):
     def __init__(self, state_len, action_len):
         super().__init__()
 
