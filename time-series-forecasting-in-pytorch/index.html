@@ -9,8 +9,8 @@
     <meta name="HandheldFriendly" content="True" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" type="text/css" href="../assets/css/screen.css%3Fv=64f443a096.css" />
-    <link rel="stylesheet" type="text/css" href="../assets/css/global.css%3Fv=64f443a096.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/css/screen.css%3Fv=b5cd2ed31e.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/css/global.css%3Fv=b5cd2ed31e.css" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,700" rel="stylesheet">
@@ -26,8 +26,8 @@
     <meta property="og:description" content="Time series forecasting is a classical problem in which you predict the values in the next timesteps, given historical data. The M5 Forecasting competition on Kaggle is an excellent dataset for time series forecasting. The ultimate goal of the competition is to predict the sales of a variety of products." />
     <meta property="og:url" content="https://andrewpeng.dev/time-series-forecasting-in-pytorch/" />
     <meta property="og:image" content="https://andrewpeng.dev/content/images/2020/04/Screenshot-from-2020-04-21-17-01-18.png" />
-    <meta property="article:published_time" content="2020-04-21T21:37:01.000Z" />
-    <meta property="article:modified_time" content="2020-04-21T22:01:33.000Z" />
+    <meta property="article:published_time" content="2020-08-27T21:37:00.000Z" />
+    <meta property="article:modified_time" content="2020-12-20T16:22:38.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Time Series Forecasting in Pytorch" />
     <meta name="twitter:description" content="Time series forecasting is a classical problem in which you predict the values in the next timesteps, given historical data. The M5 Forecasting competition on Kaggle is an excellent dataset for time series forecasting. The ultimate goal of the competition is to predict the sales of a variety of products." />
@@ -55,8 +55,8 @@
     },
     "headline": "Time Series Forecasting in Pytorch",
     "url": "https://andrewpeng.dev/time-series-forecasting-in-pytorch/",
-    "datePublished": "2020-04-21T21:37:01.000Z",
-    "dateModified": "2020-04-21T22:01:33.000Z",
+    "datePublished": "2020-08-27T21:37:00.000Z",
+    "dateModified": "2020-12-20T16:22:38.000Z",
     "image": {
         "@type": "ImageObject",
         "url": "https://andrewpeng.dev/content/images/2020/04/Screenshot-from-2020-04-21-17-01-18.png",
@@ -133,7 +133,7 @@
         hidden = (weight.new(self.num_layers, batch_size, self.hidden_dim).zero_(),
                  weight.new(self.num_layers, batch_size, self.hidden_dim).zero_())
 
-        return hidden</code></pre><!--kg-card-end: code--><p>I passed in the amount of sales and other features like day of week, and the model predicts the amount of sales for each day in the future.</p><p>Training the network gave me these results:</p><!--kg-card-begin: html-->'<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plotly.com/~andrewpeng02/42.embed" height="525" width="100%"></iframe>'<!--kg-card-end: html--><p>Loss decreased to about 1.80 over 20 epochs. This is an example output of the model:</p><!--kg-card-begin: html-->'<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plotly.com/~andrewpeng02/40.embed" height="525" width="100%"></iframe>'<!--kg-card-end: html--><p>Although peaks of sales are not well represented, the model generally followed the true sales amounts. The code is available on <a href="https://github.com/andrewpeng02/m5-forecasting">GitHub</a>.</p>
+        return hidden</code></pre><!--kg-card-end: code--><p>I passed in the amount of sales and other features like day of week, and the model predicts the amount of sales for each day in the future.</p><p>Training the network gave me these results:</p><!--kg-card-begin: html-->'<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plotly.com/~andrewpeng02/42.embed" height="525" width="100%"></iframe>'<!--kg-card-end: html--><p>Loss decreased to about 1.80 over 20 epochs. This is an example output of the model:</p><!--kg-card-begin: html-->'<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plotly.com/~andrewpeng02/40.embed" height="525" width="100%"></iframe>'<!--kg-card-end: html--><p>Although peaks of sales are not well represented, the model generally followed the true sales amounts. The code is available on <a href="https://github.com/andrewpeng02/m5-forecasting">GitHub</a>.</p><!--kg-card-begin: hr--><hr><!--kg-card-end: hr--><p>UPDATE: The competition has finished, and you can view a synopsis of the first place solution <a href="https://www.kaggle.com/c/m5-forecasting-accuracy/discussion/163684">here</a>. They used the LightGBM gradient boosting framework along with a clever loss metric and feature selection. </p>
             </div>
         </section>
 
@@ -184,7 +184,7 @@
         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
         crossorigin="anonymous">
     </script>
-    <script type="text/javascript" src="https://andrewpeng.dev/assets/built/jquery.fitvids.js?v=64f443a096"></script>
+    <script type="text/javascript" src="https://andrewpeng.dev/assets/built/jquery.fitvids.js?v=b5cd2ed31e"></script>
 
 
     
